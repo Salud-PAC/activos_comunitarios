@@ -3,276 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prescripción Social - Elige Vida Sana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Prescripción Social | CESFAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #2563eb;
-            --bg: #f8fafc;
-            --text: #1e293b;
+            --primary: #0d9488;
+            --primary-dark: #0f766e;
+            --bg-body: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #1e293b;
             --border: #e2e8f0;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-        }
-
-        .container { max-width: 1100px; margin: 0 auto; }
-
-        header {
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 15px;
-        }
-
-        h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
-        p { margin: 5px 0 0; color: #64748b; }
-
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        select, input {
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
-
-        th {
-            background: #f1f5f9;
-            padding: 15px;
-            text-align: left;
-            font-size: 0.85rem;
-            text-transform: uppercase;
-        }
-
-        td {
-            padding: 20px 15px; /* Separación de 20px solicitada */
-            border-bottom: 1px solid var(--border);
-        }
-
-        .item-row:hover { background: #f8fafc; cursor: pointer; }
-        .item-row.selected { background: #eff6ff; border-left: 4px solid var(--primary); }
-
-        .badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-        .bg-territorio { background: #dbeafe; color: #1e40af; }
-        
-        /* Colores de Impacto Restaurados */
-        .impact-bajo { color: #22c55e; font-weight: bold; }
-        .impact-medio { color: #eab308; font-weight: bold; }
-        .impact-alto { color: #ef4444; font-weight: bold; }
-
-        .has-tooltip { cursor: help; border-bottom: 1px dotted #ccc; }
-
+        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 120px; }
         #print-area { display: none; }
+
+        /* --- INTERFAZ WEB --- */
+        header { background: var(--surface); padding: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        .container { max-width: 1240px; margin: 0 auto; padding: 0 30px; } 
+
+        .toolbar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
+        input, select { padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; flex: 1; min-width: 200px; font-family: inherit; font-size: 0.9rem; }
+
+        .card-table { background: var(--surface); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); overflow: hidden; }
+        table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+
+        thead th { position: sticky; top: 0; z-index: 10; background: #f1f5f9; box-shadow: inset 0 -1px 0 var(--border); }
+        th { text-align: left; padding: 16px; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; }
+        td { padding: 20px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.88rem; line-height: 1.3; }
+
+        .col-check { width: 40px; }
+        .col-actividad { width: 25%; }
+        .col-horario { width: 15%; }
+        .col-lugar { width: 25%; }
+        .col-impacto { width: 80px; text-align: center; }
+
+        .item-row { cursor: pointer; transition: background 0.1s; }
+        .item-row:hover { background-color: #f8fafc; }
+        .item-row.selected { background-color: #f0fdfa; }
+
+        .check-ui { width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: white; }
+        .item-row.selected .check-ui { background: var(--primary); border-color: var(--primary); }
+        .item-row.selected .check-ui::after { content: '✓'; color: white; font-size: 11px; }
+
+        .impact-bajo { color: #22c55e; font-size: 1.2rem; }
+        .impact-medio { color: #eab308; font-size: 1.2rem; }
+        .impact-alto { color: #ef4444; font-size: 1.2rem; }
+
+        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 25px; border-radius: 50px; display: flex; gap: 20px; align-items: center; z-index: 1000; }
+        .btn-print { background: var(--primary); color: white; border: none; padding: 12px 28px; border-radius: 25px; font-weight: 600; cursor: pointer; }
+
+        /* --- DISEÑO DE IMPRESIÓN (CALCO DEL ORIGINAL) --- */
         @media print {
-            body * { visibility: hidden; }
-            #print-area, #print-area * { visibility: visible; }
-            #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; }
-            .print-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-            .print-card {
-                border: 2px solid #000;
-                padding: 15px;
-                border-radius: 10px;
-                page-break-inside: avoid;
-            }
+            @page { size: letter; margin: 1cm; }
+            header, .container, .floating-bar { display: none !important; }
+            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #print-area { display: block !important; width: 100%; }
+            .doc-header { margin-bottom: 30px; border-left: 6px solid var(--primary); padding-left: 15px; }
+            .doc-header h2 { margin: 0; font-size: 16pt; color: var(--primary-dark); text-transform: uppercase; }
+            .doc-header p { margin: 3px 0 0 0; font-size: 10pt; color: #333; font-weight: 600; text-transform: uppercase; }
+            .doc-title { text-align: center; font-size: 13pt; font-weight: 800; border: 2px solid #000; padding: 8px; margin-bottom: 35px; background: #f8fafc; }
+            .patient-section { margin-bottom: 45px; } 
+            .patient-row { margin-bottom: 18px; display: flex; gap: 20px; font-size: 11pt; }
+            .field-full { flex: 1; border-bottom: 1.5px solid #000; padding-bottom: 2px; }
+            .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+            .print-card { border: 1.5px solid var(--primary); border-radius: 10px; padding: 15px; background: #fff; page-break-inside: avoid; margin-top: 25px; }
+            .print-card h3 { margin: 0 0 5px 0; font-size: 11.5pt; color: var(--primary-dark); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 5px; }
+            .provider-name { font-size: 9pt; font-style: italic; color: #555; margin-bottom: 8px; display: block; }
+            .data-row { display: flex; font-size: 9.5pt; margin-bottom: 3px; line-height: 1.2; }
+            .data-label { font-weight: 700; width: 75px; color: #222; flex-shrink: 0; }
+            .footer-section { margin-top: 150px; display: flex; justify-content: center; } 
+            .footer-section { margin-top: 50px; display: flex; justify-content: center; } 
+            .sign-line { border-top: 2px solid #000; width: 280px; text-align: center; padding-top: 8px; font-weight: 700; font-size: 10pt; text-transform: uppercase; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
     <header>
-        <h1>Selecciona los criterios necesarios</h1>
-        <p>Considera la exigencia o impacto según el tipo de actividad antes de prescribir.</p>
+        <div class="container">
+            <h1>Catálogo de Prescripción Social</h1>
+            <p>Seleccione actividades para generar la receta del paciente.</p>
+        </div>
     </header>
 
-    <div class="filters">
-        <input type="text" id="search-box" placeholder="Buscar actividad..." oninput="render()">
-        
-        <select id="filter-area" onchange="render()">
-            <option value="all">Todas las Áreas</option>
-            <option value="Actividad Física">Actividad Física</option>
-            <option value="Alimentación">Alimentación</option>
-            <option value="Salud Mental">Salud Mental</option>
-            <option value="Comunitario">Comunitario</option>
-        </select>
+    <div class="container">
+        <div class="toolbar">
+            <input type="text" id="search-box" placeholder="Buscar actividad, categoría o territorio...">
+            <select id="filter-area"><option value="all">Todas las áreas</option></select>
+            <select id="filter-territorio">
+                <option value="all">Todos los territorios</option>
+                <option value="T1">Territorio 1</option>
+                <option value="T2">Territorio 2</option>
+                <option value="T3">Territorio 3</option>
+                <option value="T4">Territorio 4</option>
+            </select>
+        </div>
 
-        <select id="filter-territorio" onchange="render()">
-            <option value="all">Todos los Territorios</option>
-            <option value="T1">Territorio 1</option>
-            <option value="T2">Territorio 2</option>
-            <option value="T3">Territorio 3</option>
-            <option value="T4">Territorio 4</option>
-        </select>
-
-        <select id="filter-impacto" onchange="render()">
-            <option value="all">Cualquier Impacto</option>
-            <option value="Bajo">🟢 Bajo</option>
-            <option value="Medio">🟡 Medio</option>
-            <option value="Alto">🔴 Alto</option>
-        </select>
-        
-        <button id="btn-print" onclick="window.print()" disabled style="padding: 10px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
-            Imprimir Receta (<span id="count-display">0</span>)
-        </button>
+        <div class="card-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="col-check"></th>
+                        <th class="col-actividad">Actividad / Categoría</th>
+                        <th class="col-horario">Día y Horario</th>
+                        <th class="col-lugar">Lugar y Costo</th>
+                        <th class="col-impacto">Imp.</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <tr><td colspan="5" style="text-align:center; padding:30px;">Cargando catálogo...</td></tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th style="width: 30px;"></th>
-                <th>Categoría / Actividad</th>
-                <th>Día y Horario</th>
-                <th>Territorio</th>
-                <th>Contacto y Costo</th>
-                <th style="width: 50px; text-align: center;">Imp.</th>
-            </tr>
-        </thead>
-        <tbody id="table-body"></tbody>
-    </table>
-</div>
+    <div class="floating-bar">
+        <div>Seleccionados: <strong id="count-display">0</strong> / 4</div>
+        <button class="btn-print" id="btn-print" onclick="prepareAndPrint()" disabled>IMPRIMIR RECETA</button>
+    </div>
 
-<div id="print-area">
-    <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">Prescripción Social - Elige Vida Sana</h2>
-    <div id="print-grid-container" class="print-grid"></div>
-</div>
+    <div id="print-area">
+        <div class="doc-header">
+            <h2>CESFAM Edgardo Enríquez Frodden</h2>
+            <p>Activos Comunitarios</p>
+        </div>
+        <div class="doc-title">INDICACIÓN DE ACTIVIDAD COMUNITARIA</div>
+        <div class="patient-section">
+            <div class="patient-row">
+                <span style="font-weight:700;">Nombre Paciente:</span>
+                <span class="field-full"></span>
+            </div>
+            <div class="patient-row">
+                <div style="flex: 1; display: flex;"><span style="font-weight:700; margin-right:10px;">RUT:</span><span class="field-full"></span></div>
+                <div style="flex: 1; display: flex;"><span style="font-weight:700; margin-right:10px;">Fecha:</span><span class="field-full"></span></div>
+            </div>
+        </div>
+        <div id="print-grid-container" class="print-grid"></div>
+        <div class="footer-section">
+            <div class="sign-line">Firma y Timbre Profesional</div>
+        </div>
+        <div class="disclaimer" style="margin-top:40px; text-align:center; font-size:9pt; border-top:1px dashed #ccc; padding-top:10px;">
+            Para consultas de cupos, llame al número indicado en cada taller.
+        </div>
+    </div>
 
-<script>
-    // URL integrada correctamente
-    const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec"; 
-    
-    let allData = [];
-    let selectedIndices = new Set();
+    <script>
+        const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec";
 
-    async function loadData() {
-        try {
-            const response = await fetch(API_URL);
-            allData = await response.json();
-            render();
-        } catch (e) {
-            console.error("Error cargando datos", e);
-        }
-    }
+        let allData = [];
+        let selectedIndices = new Set();
 
-    function render() {
-        const sText = document.getElementById('search-box').value.toLowerCase();
-        const sArea = document.getElementById('filter-area').value;
-        const sTerr = document.getElementById('filter-territorio').value;
-        const sImp = document.getElementById('filter-impacto').value;
-
-        const filtered = allData.filter(d => {
-            const matchT = sText === "" || JSON.stringify(d).toLowerCase().includes(sText);
-            const matchA = sArea === 'all' || (d.categoria && d.categoria.includes(sArea));
-            const matchTe = sTerr === 'all' || (d.territorio && d.territorio.toString().includes(sTerr));
-            const matchI = sImp === 'all' || (d.impacto && d.impacto.toString().toLowerCase() === sImp.toLowerCase());
-            return matchT && matchA && matchTe && matchI;
-        });
-
-        const tbody = document.getElementById('table-body');
-        tbody.innerHTML = "";
-        
-        filtered.forEach(item => {
-            const idx = allData.indexOf(item);
-            const sel = selectedIndices.has(idx);
-            
-            let iconHTML = ''; 
-            let colorClass = '';
-            if (item.impacto) {
-                const imp = item.impacto.toString().trim().toLowerCase();
-                if (imp === 'bajo') { iconHTML = '🟢'; colorClass = 'impact-bajo'; }
-                else if (imp === 'medio') { iconHTML = '🟡'; colorClass = 'impact-medio'; }
-                else if (imp === 'alto') { iconHTML = '🔴'; colorClass = 'impact-alto'; }
+        async function init() {
+            try {
+                const response = await fetch(API_URL);
+                allData = await response.json();
+                populateFilters();
+                renderTable(allData);
+            } catch (e) {
+                document.getElementById('table-body').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Error de carga.</td></tr>`;
             }
+        }
 
-            const tr = document.createElement('tr');
-            tr.className = `item-row ${sel ? 'selected' : ''}`;
-            tr.innerHTML = `
-                <td><input type="checkbox" ${sel ? 'checked' : ''}></td>
-                <td>
-                    <div class="has-tooltip" title="${item.observaciones || 'Sin observaciones'}">
-                        <small style="color: #64748b; font-weight: bold; text-transform: uppercase;">${item.categoria || ''}</small><br>
-                        <strong>${item.actividad || '---'}</strong>
-                    </div>
-                </td>
-                <td style="font-size: 0.85rem;">
-                    ${item.dia || ''}<br>
-                    <strong>${item.horario || ''}</strong>
-                </td>
-                <td>
-                    ${item.territorio ? item.territorio.split(',').map(t => `<span class="badge bg-territorio">${t.trim()}</span>`).join('') : ''}
-                </td>
-                <td style="font-size: 0.8rem; line-height: 1.4;">
-                    📍 ${item.direccion || item.lugar || ''}<br>
-                    📞 ${item.telefono || ''} | 💰 ${item.costo || 'Gratis'}
-                </td>
-                <td style="text-align:center; font-size: 1.2rem;" class="${colorClass}">
-                    ${iconHTML}
-                </td>
-            `;
+        function populateFilters() {
+            let cats = new Set();
+            allData.forEach(item => { if(item.categoria) cats.add(item.categoria); });
+            const select = document.getElementById('filter-area');
+            Array.from(cats).sort().forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c; opt.innerText = c; select.appendChild(opt);
+            });
+            select.addEventListener('change', filterData);
+            document.getElementById('filter-territorio').addEventListener('change', filterData);
+            document.getElementById('search-box').addEventListener('input', filterData);
+        }
 
-            tr.onclick = (e) => {
-                if(e.target.type !== 'checkbox') {
-                    if(sel) selectedIndices.delete(idx);
-                    else if(selectedIndices.size < 4) selectedIndices.add(idx);
-                    render();
-                    updatePrint();
-                }
-            };
-            tbody.appendChild(tr);
-        });
-    }
+        function filterData() {
+            const areaVal = document.getElementById('filter-area').value;
+            const terrVal = document.getElementById('filter-territorio').value;
+            const textVal = document.getElementById('search-box').value.toLowerCase();
+            const filtered = allData.filter(item => {
+                const matchArea = areaVal === 'all' || (item.categoria && item.categoria === areaVal);
+                const matchTerr = terrVal === 'all' || (item.territorio && item.territorio.includes(terrVal));
+                const matchText = JSON.stringify(item).toLowerCase().includes(textVal);
+                return matchArea && matchTerr && matchText;
+            });
+            renderTable(filtered);
+        }
 
-    function updatePrint() {
-        document.getElementById('count-display').innerText = selectedIndices.size;
-        document.getElementById('btn-print').disabled = selectedIndices.size === 0;
-        const container = document.getElementById('print-grid-container');
-        container.innerHTML = "";
-        
-        selectedIndices.forEach(idx => {
-            const item = allData[idx];
-            container.innerHTML += `
-                <div class="print-card">
-                    <h3 style="margin-top:0; border-bottom: 1px solid #eee;">${item.actividad}</h3>
-                    <p style="margin: 8px 0; font-size: 10pt;"><strong>📅 Día y Hora:</strong> ${item.dia} - ${item.horario}</p>
-                    <p style="margin: 5px 0; font-size: 9pt;"><strong>📍 Lugar:</strong> ${item.direccion || item.lugar}</p>
-                    <p style="margin: 5px 0; font-size: 9pt;"><strong>📞 Contacto:</strong> ${item.telefono || '---'}</p>
-                    <p style="margin: 5px 0; font-size: 9pt;"><strong>💰 Costo:</strong> ${item.costo || 'Gratuito'}</p>
-                </div>
-            `;
-        });
-    }
-    loadData();
-</script>
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = "";
+            data.forEach((item) => {
+                const gIdx = allData.indexOf(item);
+                const isSel = selectedIndices.has(gIdx);
+                const tr = document.createElement('tr');
+                tr.className = `item-row ${isSel ? 'selected' : ''}`;
+                tr.onclick = () => {
+                    if(isSel) selectedIndices.delete(gIdx);
+                    else if(selectedIndices.size < 4) selectedIndices.add(gIdx);
+                    renderTable(data);
+                    updateUI();
+                };
+
+                let impIcon = '';
+                const imp = (item.impacto || '').toLowerCase();
+                if(imp === 'bajo') impIcon = '<span class="impact-bajo">🟢</span>';
+                else if(imp === 'medio') impIcon = '<span class="impact-medio">🟡</span>';
+                else if(imp === 'alto') impIcon = '<span class="impact-alto">🔴</span>';
+
+                tr.innerHTML = `
+                    <td class="col-check"><div class="check-ui"></div></td>
+                    <td><small style="color:#64748b; font-weight:700;">${item.categoria || ''}</small><br><strong>${item.actividad || ''}</strong></td>
+                    <td>${item.dia || ''}<br><strong>${item.horario || ''}</strong></td>
+                    <td><span style="color:#334155;">📍 ${item.direccion || ''}</span><br><small style="color:#64748b;">💰 Costo: ${item.costo || 'Gratuito'}</small></td>
+                    <td style="text-align:center">${impIcon}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateUI() {
+            document.getElementById('count-display').innerText = selectedIndices.size;
+            document.getElementById('btn-print').disabled = selectedIndices.size === 0;
+        }
+
+        function prepareAndPrint() {
+            const container = document.getElementById('print-grid-container');
+            container.innerHTML = "";
+            selectedIndices.forEach(index => {
+                const item = allData[index];
+                const card = document.createElement('div');
+                card.className = "print-card";
+                card.innerHTML = `
+                    <h3>${item.actividad || ''}</h3>
+                    <span class="provider-name">${item.proveedor || ''}</span>
+                    <div class="data-row"><div class="data-label">Cuándo:</div><div>${item.dia || ''} ${item.horario || ''}</div></div>
+                    <div class="data-row"><div class="data-label">Dónde:</div><div>${item.direccion || ''}</div></div>
+                    <div class="data-row"><div class="data-label">Contacto:</div><div>${item.telefono || ''}</div></div>
+                    <div class="data-row"><div class="data-label">Costo:</div><div>${item.costo || 'Gratuito'}</div></div>
+                `;
+                container.appendChild(card);
+            });
+            window.print();
+        }
+        init();
+    </script>
 </body>
 </html>
