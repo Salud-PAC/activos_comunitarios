@@ -18,32 +18,34 @@
         body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 120px; }
         #print-area { display: none; }
 
-        header { background: var(--surface); padding: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
-        .container { max-width: 1240px; margin: 0 auto; padding: 0 30px; } 
+        header { background: var(--surface); padding: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; }
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 30px; } 
 
         .toolbar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        input, select { padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; flex: 1; min-width: 200px; font-family: inherit; font-size: 0.9rem; }
+        input, select { padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; flex: 1; min-width: 180px; font-family: inherit; }
 
         .card-table { background: var(--surface); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); overflow: hidden; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 
-        thead th { position: sticky; top: 0; z-index: 10; background: #f1f5f9; box-shadow: inset 0 -1px 0 var(--border); }
+        thead th { position: sticky; top: 0; z-index: 10; background: #f1f5f9; }
         th { text-align: left; padding: 16px; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; }
-        td { padding: 20px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.88rem; line-height: 1.3; }
+        td { padding: 15px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.88rem; }
 
+        /* Anchos de columna */
         .col-check { width: 40px; }
-        .col-actividad { width: 25%; }
-        .col-horario { width: 15%; }
-        .col-lugar { width: 25%; }
-        .col-impacto { width: 80px; text-align: center; }
+        .col-cat { width: 15%; }
+        .col-act { width: 25%; }
+        .col-hor { width: 15%; }
+        .col-lug { width: 25%; }
+        .col-imp { width: 60px; text-align: center; }
 
-        .item-row { cursor: pointer; transition: background 0.1s; }
+        .item-row { cursor: pointer; }
         .item-row:hover { background-color: #f8fafc; }
         .item-row.selected { background-color: #f0fdfa; }
 
         .check-ui { width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: white; }
         .item-row.selected .check-ui { background: var(--primary); border-color: var(--primary); }
-        .item-row.selected .check-ui::after { content: '✓'; color: white; font-size: 11px; }
+        .item-row.selected .check-ui::after { content: '✓'; color: white; font-size: 11px; font-weight: bold; }
 
         .impact-bajo { color: #22c55e; font-size: 1.2rem; }
         .impact-medio { color: #eab308; font-size: 1.2rem; }
@@ -52,11 +54,10 @@
         .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 25px; border-radius: 50px; display: flex; gap: 20px; align-items: center; z-index: 1000; }
         .btn-print { background: var(--primary); color: white; border: none; padding: 12px 28px; border-radius: 25px; font-weight: 600; cursor: pointer; }
 
-        /* --- DISEÑO DE IMPRESIÓN (RESTAURADO EXACTO) --- */
         @media print {
             @page { size: letter; margin: 1cm; }
             header, .container, .floating-bar { display: none !important; }
-            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            body { background: white; }
             #print-area { display: block !important; width: 100%; }
             .doc-header { margin-bottom: 30px; border-left: 6px solid var(--primary); padding-left: 15px; }
             .doc-header h2 { margin: 0; font-size: 16pt; color: var(--primary-dark); text-transform: uppercase; }
@@ -68,7 +69,6 @@
             .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
             .print-card { border: 1.5px solid var(--primary); border-radius: 10px; padding: 15px; background: #fff; page-break-inside: avoid; margin-top: 25px; }
             .print-card h3 { margin: 0 0 5px 0; font-size: 11.5pt; color: var(--primary-dark); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 5px; }
-            .provider-name { font-size: 9pt; font-style: italic; color: #555; margin-bottom: 8px; display: block; }
             .data-row { display: flex; font-size: 9.5pt; margin-bottom: 3px; line-height: 1.2; }
             .data-label { font-weight: 700; width: 75px; color: #222; flex-shrink: 0; }
             .footer-section { margin-top: 50px; display: flex; justify-content: center; } 
@@ -88,14 +88,8 @@
     <div class="container">
         <div class="toolbar">
             <input type="text" id="search-box" placeholder="Buscar actividad o lugar...">
-            <select id="filter-area"><option value="all">Todas las áreas</option></select>
-            <select id="filter-territorio">
-                <option value="all">Todos los territorios</option>
-                <option value="T1">T1</option>
-                <option value="T2">T2</option>
-                <option value="T3">T3</option>
-                <option value="T4">T4</option>
-            </select>
+            <select id="filter-area"><option value="all">Todas las Categorías</option></select>
+            <select id="filter-territorio"><option value="all">Todos los Territorios</option></select>
         </div>
 
         <div class="card-table">
@@ -103,14 +97,15 @@
                 <thead>
                     <tr>
                         <th class="col-check"></th>
-                        <th class="col-actividad">Actividad / Área</th>
-                        <th class="col-horario">Día y Horario</th>
-                        <th class="col-lugar">Dirección y Costo</th>
-                        <th class="col-impacto">Imp.</th>
+                        <th class="col-cat">Categoría</th>
+                        <th class="col-act">Actividad</th>
+                        <th class="col-hor">Día y Horario</th>
+                        <th class="col-lug">Dirección y Costo</th>
+                        <th class="col-imp">Imp.</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    <tr><td colspan="5" style="text-align:center; padding:30px;">Cargando catálogo...</td></tr>
+                    <tr><td colspan="6" style="text-align:center; padding:30px;">Cargando catálogo...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -128,22 +123,15 @@
         </div>
         <div class="doc-title">INDICACIÓN DE ACTIVIDAD COMUNITARIA</div>
         <div class="patient-section">
-            <div class="patient-row">
-                <span style="font-weight:700;">Nombre Paciente:</span>
-                <span class="field-full"></span>
-            </div>
+            <div class="patient-row"><span style="font-weight:700;">Nombre Paciente:</span><span class="field-full"></span></div>
             <div class="patient-row">
                 <div style="flex: 1; display: flex;"><span style="font-weight:700; margin-right:10px;">RUT:</span><span class="field-full"></span></div>
                 <div style="flex: 1; display: flex;"><span style="font-weight:700; margin-right:10px;">Fecha:</span><span class="field-full"></span></div>
             </div>
         </div>
         <div id="print-grid-container" class="print-grid"></div>
-        <div class="footer-section">
-            <div class="sign-line">Firma y Timbre Profesional</div>
-        </div>
-        <div style="margin-top:40px; text-align:center; font-size:9pt; border-top:1px dashed #ccc; padding-top:10px;">
-            Para consultas de cupos, llame al número indicado en cada taller.
-        </div>
+        <div class="footer-section"><div class="sign-line">Firma y Timbre Profesional</div></div>
+        <div style="margin-top:40px; text-align:center; font-size:9pt; border-top:1px dashed #ccc; padding-top:10px;">Para consultas de cupos, llame al número indicado en cada taller.</div>
     </div>
 
     <script>
@@ -154,42 +142,58 @@
         async function init() {
             try {
                 const response = await fetch(API_URL);
-                allData = await response.json();
+                const json = await response.json();
+                // Normalizar nombres de llaves (quitar tildes y espacios) por si acaso
+                allData = json.map(item => {
+                    let newItem = {};
+                    for (let key in item) {
+                        let normalizedKey = key.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+                        newItem[normalizedKey] = item[key];
+                    }
+                    return newItem;
+                });
                 populateFilters();
                 renderTable(allData);
             } catch (e) {
-                document.getElementById('table-body').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Error de carga.</td></tr>`;
+                document.getElementById('table-body').innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:red;">Error de carga. Revisa la URL del script.</td></tr>`;
             }
         }
 
         function populateFilters() {
             let cats = new Set();
-            allData.forEach(item => { 
-                let val = item.area || item.categoria;
-                if(val) cats.add(val.trim()); 
+            let terrs = new Set();
+            allData.forEach(item => {
+                if(item.categoria) cats.add(item.categoria.trim());
+                if(item.territorio) item.territorio.toString().split(',').forEach(t => terrs.add(t.trim()));
             });
-            const select = document.getElementById('filter-area');
-            select.innerHTML = '<option value="all">Todas las áreas</option>';
+
+            const selCat = document.getElementById('filter-area');
             Array.from(cats).sort().forEach(c => {
-                const opt = document.createElement('option');
-                opt.value = c; opt.innerText = c; select.appendChild(opt);
+                let opt = document.createElement('option');
+                opt.value = c; opt.innerText = c; selCat.appendChild(opt);
             });
-            select.addEventListener('change', filterData);
-            document.getElementById('filter-territorio').addEventListener('change', filterData);
+
+            const selTerr = document.getElementById('filter-territorio');
+            Array.from(terrs).sort().forEach(t => {
+                let opt = document.createElement('option');
+                opt.value = t; opt.innerText = t; selTerr.appendChild(opt);
+            });
+
+            selCat.addEventListener('change', filterData);
+            selTerr.addEventListener('change', filterData);
             document.getElementById('search-box').addEventListener('input', filterData);
         }
 
         function filterData() {
-            const areaVal = document.getElementById('filter-area').value;
+            const catVal = document.getElementById('filter-area').value;
             const terrVal = document.getElementById('filter-territorio').value;
             const textVal = document.getElementById('search-box').value.toLowerCase();
+
             const filtered = allData.filter(item => {
-                const itemArea = item.area || item.categoria || "";
-                const matchArea = areaVal === 'all' || itemArea === areaVal;
-                const itemTerr = item.territorio || "";
-                const matchTerr = terrVal === 'all' || itemTerr.toString().includes(terrVal);
+                const matchCat = catVal === 'all' || item.categoria === catVal;
+                const matchTerr = terrVal === 'all' || (item.territorio && item.territorio.toString().includes(terrVal));
                 const matchText = JSON.stringify(item).toLowerCase().includes(textVal);
-                return matchArea && matchTerr && matchText;
+                return matchCat && matchTerr && matchText;
             });
             renderTable(filtered);
         }
@@ -210,16 +214,17 @@
                 };
 
                 let impIcon = '';
-                const imp = (item.impacto || '').toLowerCase();
+                const imp = (item.impacto || '').toString().toLowerCase();
                 if(imp === 'bajo') impIcon = '<span class="impact-bajo">🟢</span>';
                 else if(imp === 'medio') impIcon = '<span class="impact-medio">🟡</span>';
                 else if(imp === 'alto') impIcon = '<span class="impact-alto">🔴</span>';
 
                 tr.innerHTML = `
                     <td class="col-check"><div class="check-ui"></div></td>
-                    <td><small style="color:#64748b; font-weight:700;">${item.area || item.categoria || ''}</small><br><strong>${item.actividad || ''}</strong></td>
+                    <td>${item.categoria || ''}</td>
+                    <td><strong>${item.actividad || ''}</strong></td>
                     <td>${item.dia || ''}<br><strong>${item.horario || ''}</strong></td>
-                    <td><span style="color:#334155;">📍 ${item.direccion || ''}</span><br><small style="color:#64748b;">💰 Costo: ${item.costo || 'Gratis'}</small></td>
+                    <td>📍 ${item.direccion || ''}<br><small style="color:#64748b;">💰 ${item.costo || 'Gratis'}</small></td>
                     <td style="text-align:center">${impIcon}</td>
                 `;
                 tbody.appendChild(tr);
@@ -240,10 +245,9 @@
                 card.className = "print-card";
                 card.innerHTML = `
                     <h3>${item.actividad || ''}</h3>
-                    <span class="provider-name">${item.proveedor || ''}</span>
                     <div class="data-row"><div class="data-label">Cuándo:</div><div>${item.dia || ''} ${item.horario || ''}</div></div>
                     <div class="data-row"><div class="data-label">Dónde:</div><div>${item.direccion || ''}</div></div>
-                    <div class="data-row"><div class="data-label">Contacto:</div><div>${item.telefono || ''}</div></div>
+                    <div class="data-row"><div class="data-label">Contacto:</div><div>${item.telefono || '---'}</div></div>
                     <div class="data-row"><div class="data-label">Costo:</div><div>${item.costo || 'Gratuito'}</div></div>
                 `;
                 container.appendChild(card);
