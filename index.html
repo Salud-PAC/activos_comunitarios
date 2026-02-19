@@ -18,7 +18,6 @@
         body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 120px; }
         #print-area { display: none; }
 
-        /* --- INTERFAZ WEB --- */
         header { background: var(--surface); padding: 25px; border-bottom: 1px solid var(--border); margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .container { max-width: 1240px; margin: 0 auto; padding: 0 30px; } 
 
@@ -53,7 +52,7 @@
         .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 25px; border-radius: 50px; display: flex; gap: 20px; align-items: center; z-index: 1000; }
         .btn-print { background: var(--primary); color: white; border: none; padding: 12px 28px; border-radius: 25px; font-weight: 600; cursor: pointer; }
 
-        /* --- DISEÑO DE IMPRESIÓN (CALCO DEL ORIGINAL) --- */
+        /* --- DISEÑO DE IMPRESIÓN (RESTAURADO EXACTO) --- */
         @media print {
             @page { size: letter; margin: 1cm; }
             header, .container, .floating-bar { display: none !important; }
@@ -72,7 +71,6 @@
             .provider-name { font-size: 9pt; font-style: italic; color: #555; margin-bottom: 8px; display: block; }
             .data-row { display: flex; font-size: 9.5pt; margin-bottom: 3px; line-height: 1.2; }
             .data-label { font-weight: 700; width: 75px; color: #222; flex-shrink: 0; }
-            .footer-section { margin-top: 150px; display: flex; justify-content: center; } 
             .footer-section { margin-top: 50px; display: flex; justify-content: center; } 
             .sign-line { border-top: 2px solid #000; width: 280px; text-align: center; padding-top: 8px; font-weight: 700; font-size: 10pt; text-transform: uppercase; }
         }
@@ -89,14 +87,14 @@
 
     <div class="container">
         <div class="toolbar">
-            <input type="text" id="search-box" placeholder="Buscar actividad, categoría o territorio...">
+            <input type="text" id="search-box" placeholder="Buscar actividad o lugar...">
             <select id="filter-area"><option value="all">Todas las áreas</option></select>
             <select id="filter-territorio">
                 <option value="all">Todos los territorios</option>
-                <option value="T1">Territorio 1</option>
-                <option value="T2">Territorio 2</option>
-                <option value="T3">Territorio 3</option>
-                <option value="T4">Territorio 4</option>
+                <option value="T1">T1</option>
+                <option value="T2">T2</option>
+                <option value="T3">T3</option>
+                <option value="T4">T4</option>
             </select>
         </div>
 
@@ -105,9 +103,9 @@
                 <thead>
                     <tr>
                         <th class="col-check"></th>
-                        <th class="col-actividad">Actividad / Categoría</th>
+                        <th class="col-actividad">Actividad / Área</th>
                         <th class="col-horario">Día y Horario</th>
-                        <th class="col-lugar">Lugar y Costo</th>
+                        <th class="col-lugar">Dirección y Costo</th>
                         <th class="col-impacto">Imp.</th>
                     </tr>
                 </thead>
@@ -143,14 +141,13 @@
         <div class="footer-section">
             <div class="sign-line">Firma y Timbre Profesional</div>
         </div>
-        <div class="disclaimer" style="margin-top:40px; text-align:center; font-size:9pt; border-top:1px dashed #ccc; padding-top:10px;">
+        <div style="margin-top:40px; text-align:center; font-size:9pt; border-top:1px dashed #ccc; padding-top:10px;">
             Para consultas de cupos, llame al número indicado en cada taller.
         </div>
     </div>
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec";
-
         let allData = [];
         let selectedIndices = new Set();
 
@@ -167,8 +164,12 @@
 
         function populateFilters() {
             let cats = new Set();
-            allData.forEach(item => { if(item.categoria) cats.add(item.categoria); });
+            allData.forEach(item => { 
+                let val = item.area || item.categoria;
+                if(val) cats.add(val.trim()); 
+            });
             const select = document.getElementById('filter-area');
+            select.innerHTML = '<option value="all">Todas las áreas</option>';
             Array.from(cats).sort().forEach(c => {
                 const opt = document.createElement('option');
                 opt.value = c; opt.innerText = c; select.appendChild(opt);
@@ -183,8 +184,10 @@
             const terrVal = document.getElementById('filter-territorio').value;
             const textVal = document.getElementById('search-box').value.toLowerCase();
             const filtered = allData.filter(item => {
-                const matchArea = areaVal === 'all' || (item.categoria && item.categoria === areaVal);
-                const matchTerr = terrVal === 'all' || (item.territorio && item.territorio.includes(terrVal));
+                const itemArea = item.area || item.categoria || "";
+                const matchArea = areaVal === 'all' || itemArea === areaVal;
+                const itemTerr = item.territorio || "";
+                const matchTerr = terrVal === 'all' || itemTerr.toString().includes(terrVal);
                 const matchText = JSON.stringify(item).toLowerCase().includes(textVal);
                 return matchArea && matchTerr && matchText;
             });
@@ -214,9 +217,9 @@
 
                 tr.innerHTML = `
                     <td class="col-check"><div class="check-ui"></div></td>
-                    <td><small style="color:#64748b; font-weight:700;">${item.categoria || ''}</small><br><strong>${item.actividad || ''}</strong></td>
+                    <td><small style="color:#64748b; font-weight:700;">${item.area || item.categoria || ''}</small><br><strong>${item.actividad || ''}</strong></td>
                     <td>${item.dia || ''}<br><strong>${item.horario || ''}</strong></td>
-                    <td><span style="color:#334155;">📍 ${item.direccion || ''}</span><br><small style="color:#64748b;">💰 Costo: ${item.costo || 'Gratuito'}</small></td>
+                    <td><span style="color:#334155;">📍 ${item.direccion || ''}</span><br><small style="color:#64748b;">💰 Costo: ${item.costo || 'Gratis'}</small></td>
                     <td style="text-align:center">${impIcon}</td>
                 `;
                 tbody.appendChild(tr);
@@ -231,8 +234,8 @@
         function prepareAndPrint() {
             const container = document.getElementById('print-grid-container');
             container.innerHTML = "";
-            selectedIndices.forEach(index => {
-                const item = allData[index];
+            selectedIndices.forEach(idx => {
+                const item = allData[idx];
                 const card = document.createElement('div');
                 card.className = "print-card";
                 card.innerHTML = `
