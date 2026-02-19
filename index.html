@@ -3,250 +3,276 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo Activos Comunitarios | CESFAM</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Prescripción Social - Elige Vida Sana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #0d9488;
-            --primary-dark: #0f766e;
-            --bg-body: #f8fafc;
-            --surface: #ffffff;
-            --text-main: #1e293b;
+            --primary: #2563eb;
+            --bg: #f8fafc;
+            --text: #1e293b;
             --border: #e2e8f0;
         }
 
-        body { background-color: var(--bg-body); color: var(--text-main); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 120px; }
-        #print-area { display: none; }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+        }
 
-        /* --- INTERFAZ --- */
-        header { background: var(--surface); padding: 20px; border-bottom: 1px solid var(--border); margin-bottom: 20px; }
-        .container { max-width: 1300px; margin: 0 auto; padding: 0 20px; } 
+        .container { max-width: 1100px; margin: 0 auto; }
 
-        .toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; align-items: center; }
-        .toolbar input, .toolbar select { padding: 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 0.9rem; }
+        header {
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        h1 { margin: 0; font-size: 1.8rem; color: var(--primary); }
+        p { margin: 5px 0 0; color: #64748b; }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        select, input {
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 15px;
+            text-align: left;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 20px 15px; /* Separación de 20px solicitada */
+            border-bottom: 1px solid var(--border);
+        }
+
+        .item-row:hover { background: #f8fafc; cursor: pointer; }
+        .item-row.selected { background: #eff6ff; border-left: 4px solid var(--primary); }
+
+        .badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .bg-territorio { background: #dbeafe; color: #1e40af; }
         
-        /* Estilo para los filtros */
-        .filter-group { display: flex; flex-direction: column; gap: 4px; }
-        .filter-label { font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
+        /* Colores de Impacto Restaurados */
+        .impact-bajo { color: #22c55e; font-weight: bold; }
+        .impact-medio { color: #eab308; font-weight: bold; }
+        .impact-alto { color: #ef4444; font-weight: bold; }
 
-        .card-table { background: var(--surface); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); overflow: hidden; }
-        table { width: 100%; border-collapse: collapse; }
-        th { background: #f1f5f9; text-align: left; padding: 12px; font-size: 0.75rem; color: #64748b; text-transform: uppercase; }
-        td { padding: 12px; border-bottom: 1px solid var(--border); font-size: 0.85rem; vertical-align: middle; }
+        .has-tooltip { cursor: help; border-bottom: 1px dotted #ccc; }
 
-        /* Iconos de Impacto */
-        .impact-icon { font-size: 1.2rem; cursor: help; }
-        .impact-bajo { color: #22c55e; }   /* Verde */
-        .impact-medio { color: #eab308; }  /* Amarillo */
-        .impact-alto { color: #ef4444; }   /* Rojo */
-
-        /* Tooltip simple por navegador */
-        .has-tooltip { border-bottom: 1px dotted #cbd5e1; cursor: help; }
-
-        .item-row:hover { background-color: #f8fafc; cursor: pointer; }
-        .item-row.selected { background-color: #f0fdfa; }
-
-        .badge { padding: 3px 8px; border-radius: 12px; font-size: 0.7rem; font-weight: 600; }
-        .bg-territorio { background: #e0f2fe; color: #0369a1; margin-right: 4px; }
-
-        .floating-bar { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 12px 30px; border-radius: 50px; display: flex; gap: 20px; align-items: center; z-index: 1000; }
-        .btn-print { background: var(--primary); color: white; border: none; padding: 10px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; }
-
-        /* --- DISEÑO DE IMPRESIÓN (AJUSTADO A 1 HOJA) --- */
+        #print-area { display: none; }
         @media print {
-            @page { size: letter; margin: 0.7cm; }
-            header, .container, .floating-bar, .map-link { display: none !important; }
-            #print-area { display: block !important; width: 100%; }
-            .doc-header h2 { margin: 0; font-size: 14pt; color: var(--primary-dark); }
-            .doc-title { text-align: center; font-size: 11pt; font-weight: 800; border: 1.5px solid #000; padding: 5px; margin: 15px 0; }
-            .patient-section { margin-bottom: 15px; }
-            .patient-row { margin-bottom: 8px; display: flex; font-size: 10pt; border-bottom: 1px solid #eee; padding-bottom: 4px; }
-            .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-            .print-card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; page-break-inside: avoid; }
-            .print-card h3 { margin: 0 0 4px 0; font-size: 10pt; color: #000; border-bottom: 1px solid #eee; }
-            .footer-section { margin-top: 35px; text-align: center; } /* Subimos la firma */
-            .sign-line { border-top: 1.5px solid #000; width: 200px; margin: 0 auto; padding-top: 5px; font-size: 9pt; font-weight: bold; }
+            body * { visibility: hidden; }
+            #print-area, #print-area * { visibility: visible; }
+            #print-area { display: block; position: absolute; left: 0; top: 0; width: 100%; }
+            .print-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+            .print-card {
+                border: 2px solid #000;
+                padding: 15px;
+                border-radius: 10px;
+                page-break-inside: avoid;
+            }
         }
     </style>
 </head>
 <body>
 
+<div class="container">
     <header>
-        <div class="container">
-            <h1>Prescripción Social CESFAM</h1>
-            <p>Selecciona los parámetros necesarios; Recuerda evaluar factibilidad y perfil de usuario antes de prescribir.</p>
-        </div>
+        <h1>Selecciona los criterios necesarios</h1>
+        <p>Considera la exigencia o impacto según el tipo de actividad antes de prescribir.</p>
     </header>
 
-    <div class="container">
-        <div class="toolbar">
-            <div class="filter-group">
-                <span class="filter-label">Buscador</span>
-                <input type="text" id="search-box" placeholder="Actividad, lugar...">
-            </div>
-            <div class="filter-group">
-                <span class="filter-label">Área</span>
-                <select id="filter-area"><option value="all">Todas</option></select>
-            </div>
-            <div class="filter-group">
-                <span class="filter-label">Territorio</span>
-                <select id="filter-territorio"><option value="all">Todos</option></select>
-            </div>
-            <div class="filter-group">
-                <span class="filter-label">Impacto</span>
-                <select id="filter-impacto">
-                    <option value="all">Cualquiera</option>
-                    <option value="Bajo">Bajo</option>
-                    <option value="Medio">Medio</option>
-                    <option value="Alto">Alto</option>
-                </select>
-            </div>
-        </div>
+    <div class="filters">
+        <input type="text" id="search-box" placeholder="Buscar actividad..." oninput="render()">
+        
+        <select id="filter-area" onchange="render()">
+            <option value="all">Todas las Áreas</option>
+            <option value="Actividad Física">Actividad Física</option>
+            <option value="Alimentación">Alimentación</option>
+            <option value="Salud Mental">Salud Mental</option>
+            <option value="Comunitario">Comunitario</option>
+        </select>
 
-        <div class="card-table">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 30px;"></th>
-                        <th>Actividad</th>
-                        <th style="width: 150px;">Día/Hora</th>
-                        <th>Territorio</th>
-                        <th style="width: 80px; text-align: center;">Impacto</th>
-                    </tr>
-                </thead>
-                <tbody id="table-body"></tbody>
-            </table>
-        </div>
+        <select id="filter-territorio" onchange="render()">
+            <option value="all">Todos los Territorios</option>
+            <option value="T1">Territorio 1</option>
+            <option value="T2">Territorio 2</option>
+            <option value="T3">Territorio 3</option>
+            <option value="T4">Territorio 4</option>
+        </select>
+
+        <select id="filter-impacto" onchange="render()">
+            <option value="all">Cualquier Impacto</option>
+            <option value="Bajo">🟢 Bajo</option>
+            <option value="Medio">🟡 Medio</option>
+            <option value="Alto">🔴 Alto</option>
+        </select>
+        
+        <button id="btn-print" onclick="window.print()" disabled style="padding: 10px; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">
+            Imprimir Receta (<span id="count-display">0</span>)
+        </button>
     </div>
 
-    <div class="floating-bar">
-        <span>Seleccionados: <strong id="count-display">0</strong> / 4</span>
-        <button id="btn-print" class="btn-print" onclick="window.print()" disabled>IMPRIMIR RECETA</button>
-    </div>
+    <table>
+        <thead>
+            <tr>
+                <th style="width: 30px;"></th>
+                <th>Categoría / Actividad</th>
+                <th>Día y Horario</th>
+                <th>Territorio</th>
+                <th>Contacto y Costo</th>
+                <th style="width: 50px; text-align: center;">Imp.</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+</div>
 
-    <div id="print-area">
-        <div class="doc-header">
-            <h2>CESFAM Edgardo Enríquez Frodden</h2>
-            <p>Programa Elige Vida Sana - Activos Comunitarios</p>
-        </div>
-        <div class="doc-title">INDICACIÓN DE ACTIVIDAD COMUNITARIA</div>
-        <div class="patient-section">
-            <div class="patient-row">Nombre: __________________________________________________</div>
-            <div class="patient-row">Fecha: _________________  RUT: ___________________________</div>
-        </div>
-        <div id="print-grid-container" class="print-grid"></div>
-        <div class="footer-section">
-            <div class="sign-line">Firma y Timbre Profesional</div>
-        </div>
-    </div>
+<div id="print-area">
+    <h2 style="text-align:center; border-bottom: 2px solid #000; padding-bottom: 10px;">Prescripción Social - Elige Vida Sana</h2>
+    <div id="print-grid-container" class="print-grid"></div>
+</div>
 
-    <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec"; // REEMPLAZA ESTO
-        let allData = [];
-        let selectedIndices = new Set();
+<script>
+    // URL integrada correctamente
+    const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec"; 
+    
+    let allData = [];
+    let selectedIndices = new Set();
 
-        async function init() {
-            const resp = await fetch(`${API_URL}?t=${Date.now()}`);
-            allData = await resp.json();
-            setupFilters();
+    async function loadData() {
+        try {
+            const response = await fetch(API_URL);
+            allData = await response.json();
             render();
+        } catch (e) {
+            console.error("Error cargando datos", e);
         }
+    }
 
-        function setupFilters() {
-            const areas = new Set();
-            const territorios = new Set();
+    function render() {
+        const sText = document.getElementById('search-box').value.toLowerCase();
+        const sArea = document.getElementById('filter-area').value;
+        const sTerr = document.getElementById('filter-territorio').value;
+        const sImp = document.getElementById('filter-impacto').value;
+
+        const filtered = allData.filter(d => {
+            const matchT = sText === "" || JSON.stringify(d).toLowerCase().includes(sText);
+            const matchA = sArea === 'all' || (d.categoria && d.categoria.includes(sArea));
+            const matchTe = sTerr === 'all' || (d.territorio && d.territorio.toString().includes(sTerr));
+            const matchI = sImp === 'all' || (d.impacto && d.impacto.toString().toLowerCase() === sImp.toLowerCase());
+            return matchT && matchA && matchTe && matchI;
+        });
+
+        const tbody = document.getElementById('table-body');
+        tbody.innerHTML = "";
+        
+        filtered.forEach(item => {
+            const idx = allData.indexOf(item);
+            const sel = selectedIndices.has(idx);
             
-            allData.forEach(d => {
-                if(d.area) d.area.split(',').forEach(a => areas.add(a.trim()));
-                if(d.territorio) d.territorio.split(',').forEach(t => territorios.add(t.trim()));
-            });
+            let iconHTML = ''; 
+            let colorClass = '';
+            if (item.impacto) {
+                const imp = item.impacto.toString().trim().toLowerCase();
+                if (imp === 'bajo') { iconHTML = '🟢'; colorClass = 'impact-bajo'; }
+                else if (imp === 'medio') { iconHTML = '🟡'; colorClass = 'impact-medio'; }
+                else if (imp === 'alto') { iconHTML = '🔴'; colorClass = 'impact-alto'; }
+            }
 
-            const fillSelect = (id, set) => {
-                const el = document.getElementById(id);
-                Array.from(set).sort().forEach(val => {
-                    const opt = document.createElement('option');
-                    opt.value = val; opt.innerText = val; el.appendChild(opt);
-                });
-            };
+            const tr = document.createElement('tr');
+            tr.className = `item-row ${sel ? 'selected' : ''}`;
+            tr.innerHTML = `
+                <td><input type="checkbox" ${sel ? 'checked' : ''}></td>
+                <td>
+                    <div class="has-tooltip" title="${item.observaciones || 'Sin observaciones'}">
+                        <small style="color: #64748b; font-weight: bold; text-transform: uppercase;">${item.categoria || ''}</small><br>
+                        <strong>${item.actividad || '---'}</strong>
+                    </div>
+                </td>
+                <td style="font-size: 0.85rem;">
+                    ${item.dia || ''}<br>
+                    <strong>${item.horario || ''}</strong>
+                </td>
+                <td>
+                    ${item.territorio ? item.territorio.split(',').map(t => `<span class="badge bg-territorio">${t.trim()}</span>`).join('') : ''}
+                </td>
+                <td style="font-size: 0.8rem; line-height: 1.4;">
+                    📍 ${item.direccion || item.lugar || ''}<br>
+                    📞 ${item.telefono || ''} | 💰 ${item.costo || 'Gratis'}
+                </td>
+                <td style="text-align:center; font-size: 1.2rem;" class="${colorClass}">
+                    ${iconHTML}
+                </td>
+            `;
 
-            fillSelect('filter-area', areas);
-            fillSelect('filter-territorio', territorios);
-
-            ['search-box', 'filter-area', 'filter-territorio', 'filter-impacto'].forEach(id => {
-                document.getElementById(id).addEventListener('input', render);
-            });
-        }
-
-        function render() {
-            const sText = document.getElementById('search-box').value.toLowerCase();
-            const sArea = document.getElementById('filter-area').value;
-            const sTerr = document.getElementById('filter-territorio').value;
-            const sImp = document.getElementById('filter-impacto').value;
-
-            const filtered = allData.filter(d => {
-                const matchT = sText === "" || JSON.stringify(d).toLowerCase().includes(sText);
-                const matchA = sArea === 'all' || (d.area && d.area.includes(sArea));
-                const matchTe = sTerr === 'all' || (d.territorio && d.territorio.includes(sTerr));
-                const matchI = sImp === 'all' || (d.impacto === sImp);
-                return matchT && matchA && matchTe && matchI;
-            });
-
-            const tbody = document.getElementById('table-body');
-            tbody.innerHTML = "";
-            
-            filtered.forEach(item => {
-                const idx = allData.indexOf(item);
-                const sel = selectedIndices.has(idx);
-                const tr = document.createElement('tr');
-                tr.className = `item-row ${sel ? 'selected' : ''}`;
-                
-                // Lógica Icono Impacto
-                let icon = '⚪'; let color = '';
-                if(item.impacto === 'Bajo') { icon = '🟢'; color = 'impact-bajo'; }
-                if(item.impacto === 'Medio') { icon = '🟡'; color = 'impact-medio'; }
-                if(item.impacto === 'Alto') { icon = '🔴'; color = 'impact-alto'; }
-
-                tr.innerHTML = `
-                    <td><input type="checkbox" ${sel ? 'checked' : ''}></td>
-                    <td><span class="has-tooltip" title="${item.observaciones || 'Sin descripción'}">${item.actividad}</span></td>
-                    <td>${item.dia} - ${item.horario}</td>
-                    <td>${item.territorio ? item.territorio.split(',').map(t => `<span class="badge bg-territorio">${t.trim()}</span>`).join('') : ''}</td>
-                    <td style="text-align:center"><span class="impact-icon ${color}" title="Impacto ${item.impacto}">${icon}</span></td>
-                `;
-
-                tr.onclick = () => {
+            tr.onclick = (e) => {
+                if(e.target.type !== 'checkbox') {
                     if(sel) selectedIndices.delete(idx);
                     else if(selectedIndices.size < 4) selectedIndices.add(idx);
                     render();
                     updatePrint();
-                };
-                tbody.appendChild(tr);
-            });
-        }
+                }
+            };
+            tbody.appendChild(tr);
+        });
+    }
 
-        function updatePrint() {
-            document.getElementById('count-display').innerText = selectedIndices.size;
-            document.getElementById('btn-print').disabled = selectedIndices.size === 0;
-            
-            const container = document.getElementById('print-grid-container');
-            container.innerHTML = "";
-            selectedIndices.forEach(idx => {
-                const item = allData[idx];
-                container.innerHTML += `
-                    <div class="print-card">
-                        <h3>${item.actividad}</h3>
-                        <div style="font-size:8pt; margin-bottom:5px;">${item.dia} a las ${item.horario}</div>
-                        <div style="font-size:8pt;"><strong>Lugar:</strong> ${item.direccion || item.lugar}</div>
-                        <div style="font-size:8pt;"><strong>Contacto:</strong> ${item.telefono || 'Ver en mesón'}</div>
-                    </div>
-                `;
-            });
-        }
-
-        init();
-    </script>
+    function updatePrint() {
+        document.getElementById('count-display').innerText = selectedIndices.size;
+        document.getElementById('btn-print').disabled = selectedIndices.size === 0;
+        const container = document.getElementById('print-grid-container');
+        container.innerHTML = "";
+        
+        selectedIndices.forEach(idx => {
+            const item = allData[idx];
+            container.innerHTML += `
+                <div class="print-card">
+                    <h3 style="margin-top:0; border-bottom: 1px solid #eee;">${item.actividad}</h3>
+                    <p style="margin: 8px 0; font-size: 10pt;"><strong>📅 Día y Hora:</strong> ${item.dia} - ${item.horario}</p>
+                    <p style="margin: 5px 0; font-size: 9pt;"><strong>📍 Lugar:</strong> ${item.direccion || item.lugar}</p>
+                    <p style="margin: 5px 0; font-size: 9pt;"><strong>📞 Contacto:</strong> ${item.telefono || '---'}</p>
+                    <p style="margin: 5px 0; font-size: 9pt;"><strong>💰 Costo:</strong> ${item.costo || 'Gratuito'}</p>
+                </div>
+            `;
+        });
+    }
+    loadData();
+</script>
 </body>
 </html>
-
-
-
