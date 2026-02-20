@@ -71,37 +71,26 @@
        SECCIÓN DE IMPRESIÓN (RECETA)
        ========================================== */
     @media print {
-      /* Ocultar interfaz web */
-      .filter-container, .selection-bar, .btn-print, th:first-child, td:first-child, #active-filters { 
-        display: none !important; 
-      }
-
-      /* MOSTRAR SOLO SELECCIONADOS */
-      tr:not(.selected-row) { display: none !important; }
-      thead tr { display: table-row !important; }
-
-      body { padding: 0; background: white; color: black; }
-      .header-app { margin-left: 0; padding: 0; }
-      
-      .table-wrapper { box-shadow: none; border: none; width: 100% !important; margin-top: 30px; }
-      table { width: 100% !important; border-collapse: collapse; }
-      
-      th { 
-        background: none !important; 
-        color: black !important; 
-        border-bottom: 2px solid var(--primary) !important; 
-        padding: 10px 5px;
-      }
-      
-      td { border: none !important; border-bottom: 1px solid #eee !important; padding: 15px 5px; }
-      
-      .negrita { font-size: 16px; color: black; }
-      .secundario { color: #444 !important; }
-      
-      .circulo { 
-        print-color-adjust: exact; 
-        -webkit-print-color-adjust: exact; 
-      }
+            @page { size: letter; margin: 1cm; }
+            header, .container, .floating-bar { display: none !important; }
+            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            #print-area { display: block !important; width: 100%; }
+            .doc-header { margin-bottom: 30px; border-left: 6px solid var(--primary); padding-left: 15px; }
+            .doc-header h2 { margin: 0; font-size: 16pt; color: var(--primary-dark); text-transform: uppercase; }
+            .doc-header p { margin: 3px 0 0 0; font-size: 10pt; color: #333; font-weight: 600; text-transform: uppercase; }
+            .doc-title { text-align: center; font-size: 13pt; font-weight: 800; border: 2px solid #000; padding: 8px; margin-bottom: 35px; background: #f8fafc; }
+            .patient-section { margin-bottom: 45px; } 
+            .patient-row { margin-bottom: 18px; display: flex; gap: 20px; font-size: 11pt; }
+            .field-full { flex: 1; border-bottom: 1.5px solid #000; padding-bottom: 2px; }
+            .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+            .print-card { border: 1.5px solid var(--primary); border-radius: 10px; padding: 15px; background: #fff; page-break-inside: avoid; margin-top: 25px; }
+            .print-card h3 { margin: 0 0 5px 0; font-size: 11.5pt; color: var(--primary-dark); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 5px; }
+            .provider-name { font-size: 9pt; font-style: italic; color: #555; margin-bottom: 8px; display: block; }
+            .data-row { display: flex; font-size: 9.5pt; margin-bottom: 3px; line-height: 1.2; }
+            .data-label { font-weight: 700; width: 75px; color: #222; flex-shrink: 0; }
+            .footer-section { margin-top: 50px; display: flex; justify-content: center; } 
+            .sign-line { border-top: 2px solid #000; width: 280px; text-align: center; padding-top: 8px; font-weight: 700; font-size: 10pt; text-transform: uppercase; }
+        }
     }
   </style>
 </head>
@@ -244,3 +233,4 @@
   </script>
 </body>
 </html>
+
