@@ -23,39 +23,48 @@
         .container { max-width: 1240px; margin: 0 auto; padding: 0 30px; } 
 
         .toolbar { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        input, select { padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; flex: 1; min-width: 200px; font-family: inherit; font-size: 0.9rem; }
-
-        .card-table { background: var(--surface); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); overflow: hidden; }
+        input, select { padding: 12px 16px; border: 1px solid var(--border); border-radius: 10px; flex: 1; min-width: 250px; font-family: inherit; font-size: 0.9rem; }
+        
+        .card-table { background: var(--surface); border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid var(--border); }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+        
+        thead th { 
+            position: sticky; 
+            top: 0; 
+            z-index: 10; 
+            background: #f1f5f9; 
+            box-shadow: inset 0 -1px 0 var(--border); 
+        }
 
-        thead th { position: sticky; top: 0; z-index: 10; background: #f1f5f9; box-shadow: inset 0 -1px 0 var(--border); }
         th { text-align: left; padding: 16px; font-size: 0.75rem; text-transform: uppercase; color: #64748b; font-weight: 700; }
-        td { padding: 20px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.88rem; line-height: 1.3; }
+        td { padding: 14px 10px; border-bottom: 1px solid var(--border); vertical-align: middle; font-size: 0.88rem; line-height: 1.3; word-wrap: break-word; }
 
-        /* AJUSTE COLUMNAS WEB */
-        .col-check { width: 40px; }
-        .col-cat { width: 15%; }
-        .col-act { width: 25%; }
-        .col-hor { width: 15%; }
-        .col-lug { width: 25%; }
-        .col-imp { width: 60px; text-align: center; }
+        /* AJUSTE DE COLUMNAS WEB */
+        .col-check { width: 20px; padding-right: 0 !important; } 
+        .col-actividad { width: 25%; padding-left: 5px !important; } 
+        .col-horario { width: 15%; } 
+        .col-lugar { width: 25%; padding-left: 40px !important; } 
+        .col-area { width: 25%; }
 
         .item-row { cursor: pointer; transition: background 0.1s; }
         .item-row:hover { background-color: #f8fafc; }
         .item-row.selected { background-color: #f0fdfa; }
-
-        .check-ui { width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: white; }
+        
+        .check-ui { width: 18px; height: 18px; border: 2px solid #cbd5e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; transition: 0.2s; background: white; }
         .item-row.selected .check-ui { background: var(--primary); border-color: var(--primary); }
-        .item-row.selected .check-ui::after { content: '✓'; color: white; font-size: 11px; font-weight: bold; }
+        .item-row.selected .check-ui::after { content: '✓'; color: white; font-weight: bold; font-size: 11px; }
 
-        .impact-bajo { color: #22c55e; font-size: 1.2rem; }
-        .impact-medio { color: #eab308; font-size: 1.2rem; }
-        .impact-alto { color: #ef4444; font-size: 1.2rem; }
+        .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; }
+        .badge.fisica { background: #dcfce7; color: #166534; }
+        .badge.cultura { background: #ffedd5; color: #9a3412; }
+        .badge.salud { background: #dbeafe; color: #1e40af; }
+        .badge.educacion { background: #fce7f3; color: #9d174d; }
 
-        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 25px; border-radius: 50px; display: flex; gap: 20px; align-items: center; z-index: 1000; }
+        .floating-bar { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #1e293b; color: white; padding: 10px 25px; border-radius: 50px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3); display: flex; gap: 20px; align-items: center; z-index: 1000; }
         .btn-print { background: var(--primary); color: white; border: none; padding: 12px 28px; border-radius: 25px; font-weight: 600; cursor: pointer; }
+        .btn-clear { background: transparent; border: none; color: #cbd5e1; cursor: pointer; text-decoration: underline; font-size: 0.85rem; }
 
-        /* --- DISEÑO DE IMPRESIÓN (CALCO EXACTO DEL ORIGINAL) --- */
+        /* --- DISEÑO DE IMPRESIÓN --- */
         @media print {
             @page { size: letter; margin: 1cm; }
             header, .container, .floating-bar { display: none !important; }
@@ -75,7 +84,6 @@
             .data-row { display: flex; font-size: 9.5pt; margin-bottom: 3px; line-height: 1.2; }
             .data-label { font-weight: 700; width: 75px; color: #222; flex-shrink: 0; }
             .footer-section { margin-top: 150px; display: flex; justify-content: center; } 
-            .footer-section { margin-top: 50px; display: flex; justify-content: center; } 
             .sign-line { border-top: 2px solid #000; width: 280px; text-align: center; padding-top: 8px; font-weight: 700; font-size: 10pt; text-transform: uppercase; }
         }
     </style>
@@ -85,15 +93,14 @@
     <header>
         <div class="container">
             <h1>Catálogo de Prescripción Social</h1>
-            <p>Seleccione actividades para generar la receta del paciente.</p>
+            <p class="subtitle">Seleccione actividades para generar la receta del paciente.</p>
         </div>
     </header>
 
     <div class="container">
         <div class="toolbar">
-            <input type="text" id="search-box" placeholder="Buscar actividad o lugar...">
-            <select id="filter-area"><option value="all">Todas las Categorías</option></select>
-            <select id="filter-territorio"><option value="all">Todos los Territorios</option></select>
+            <input type="text" id="search-box" placeholder="Buscar actividad, día o lugar...">
+            <select id="filter-area"><option value="all">Todas las áreas</option></select>
         </div>
 
         <div class="card-table">
@@ -101,15 +108,14 @@
                 <thead>
                     <tr>
                         <th class="col-check"></th>
-                        <th class="col-cat">Categoría</th>
-                        <th class="col-act">Actividad</th>
-                        <th class="col-hor">Día y Horario</th>
-                        <th class="col-lug">Dirección y Costo</th>
-                        <th class="col-imp">Imp.</th>
+                        <th class="col-actividad">Actividad (Taller)</th>
+                        <th class="col-horario">Horario / Día</th>
+                        <th class="col-lugar">Lugar</th>
+                        <th class="col-area">Área</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
-                    <tr><td colspan="6" style="text-align:center; padding:30px;">Cargando catálogo...</td></tr>
+                    <tr><td colspan="5" style="text-align:center; padding:30px;">Cargando catálogo...</td></tr>
                 </tbody>
             </table>
         </div>
@@ -117,7 +123,8 @@
 
     <div class="floating-bar">
         <div>Seleccionados: <strong id="count-display">0</strong> / 4</div>
-        <button class="btn-print" id="btn-print" onclick="prepareAndPrint()" disabled>IMPRIMIR RECETA</button>
+        <button class="btn-clear" onclick="clearSelection()">Borrar selección</button>
+        <button id="btn-print" class="btn-print" onclick="prepareAndPrint()" disabled>IMPRIMIR RECETA</button>
     </div>
 
     <div id="print-area">
@@ -152,6 +159,7 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec";
+        
         let allData = [];
         let selectedIndices = new Set();
 
@@ -162,48 +170,41 @@
                 populateFilters();
                 renderTable(allData);
             } catch (e) {
-                document.getElementById('table-body').innerHTML = `<tr><td colspan="6" style="text-align:center; padding:20px; color:red;">Error de conexión.</td></tr>`;
+                document.getElementById('table-body').innerHTML = `<tr><td colspan="5" style="text-align:center; padding:20px; color:red;">Error de carga.</td></tr>`;
             }
         }
 
         function populateFilters() {
-            let cats = new Set();
-            let terrs = new Set();
-            
+            let categoriasUnicas = new Set();
             allData.forEach(item => {
-                if(item.categoria) cats.add(item.categoria.trim());
-                if(item.territorio) {
-                    item.territorio.toString().split(',').forEach(t => terrs.add(t.trim()));
-                }
+                const area = item.area || 'Otros';
+                const partes = area.split(/[,/;]+/); 
+                partes.forEach(p => {
+                    const limpia = p.trim();
+                    if(limpia) categoriasUnicas.add(limpia);
+                });
             });
 
-            const selCat = document.getElementById('filter-area');
-            Array.from(cats).sort().forEach(c => {
-                let opt = document.createElement('option');
-                opt.value = c; opt.innerText = c; selCat.appendChild(opt);
+            const select = document.getElementById('filter-area');
+            select.innerHTML = '<option value="all">Todas las áreas</option>';
+            Array.from(categoriasUnicas).sort().forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat; opt.innerText = cat; select.appendChild(opt);
             });
 
-            const selTerr = document.getElementById('filter-territorio');
-            Array.from(terrs).sort().forEach(t => {
-                let opt = document.createElement('option');
-                opt.value = t; opt.innerText = t; selTerr.appendChild(opt);
-            });
-
-            selCat.addEventListener('change', filterData);
-            selTerr.addEventListener('change', filterData);
+            select.addEventListener('change', filterData);
             document.getElementById('search-box').addEventListener('input', filterData);
         }
 
         function filterData() {
-            const catVal = document.getElementById('filter-area').value;
-            const terrVal = document.getElementById('filter-territorio').value;
+            const areaVal = document.getElementById('filter-area').value;
             const textVal = document.getElementById('search-box').value.toLowerCase();
-
+            
             const filtered = allData.filter(item => {
-                const matchCat = catVal === 'all' || item.categoria === catVal;
-                const matchTerr = terrVal === 'all' || (item.territorio && item.territorio.toString().includes(terrVal));
+                const itemArea = (item.area || 'Otros').toLowerCase();
+                const matchArea = areaVal === 'all' || itemArea.includes(areaVal.toLowerCase());
                 const matchText = JSON.stringify(item).toLowerCase().includes(textVal);
-                return matchCat && matchTerr && matchText;
+                return matchArea && matchText;
             });
             renderTable(filtered);
         }
@@ -212,35 +213,38 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = "";
             data.forEach((item) => {
-                const gIdx = allData.indexOf(item);
-                const isSel = selectedIndices.has(gIdx);
+                const globalIndex = allData.indexOf(item);
+                const isSelected = selectedIndices.has(globalIndex);
                 const tr = document.createElement('tr');
-                tr.className = `item-row ${isSel ? 'selected' : ''}`;
+                tr.className = `item-row ${isSelected ? 'selected' : ''}`;
+                
                 tr.onclick = () => {
-                    if(isSel) selectedIndices.delete(gIdx);
-                    else if(selectedIndices.size < 4) selectedIndices.add(gIdx);
+                    if(isSelected) selectedIndices.delete(globalIndex);
+                    else if(selectedIndices.size < 4) selectedIndices.add(globalIndex);
+                    else return alert("Máximo 4 actividades.");
                     renderTable(data);
                     updateUI();
                 };
 
-                let impIcon = '';
-                const imp = (item.impacto || '').toString().toLowerCase();
-                if(imp === 'bajo') impIcon = '<span class="impact-bajo">🟢</span>';
-                else if(imp === 'medio') impIcon = '<span class="impact-medio">🟡</span>';
-                else if(imp === 'alto') impIcon = '<span class="impact-alto">🔴</span>';
+                const area = item.area || "General";
+                let bClass = 'default';
+                if(area.toLowerCase().includes('física')) bClass = 'fisica';
+                else if(area.toLowerCase().includes('cultura')) bClass = 'cultura';
+                else if(area.toLowerCase().includes('educación')) bClass = 'educacion';
+                else if(area.toLowerCase().includes('salud')) bClass = 'salud';
 
                 tr.innerHTML = `
                     <td class="col-check"><div class="check-ui"></div></td>
-                    <td>${item.categoria || ''}</td>
-                    <td><strong>${item.actividad || ''}</strong></td>
-                    <td>${item.dia || ''}<br><strong>${item.horario || ''}</strong></td>
-                    <td>📍 ${item.direccion || ''}<br><small style="color:#64748b;">💰 Costo: ${item.costo || 'Gratis'}</small></td>
-                    <td style="text-align:center">${impIcon}</td>
+                    <td class="col-actividad"><strong>${item.actividad || ''}</strong></td>
+                    <td class="col-horario">${item.dia || ''} ${item.horario || ''}</td>
+                    <td class="col-lugar"><span style="color:#666;">${item.direccion || ''}</span></td>
+                    <td class="col-area"><span class="badge ${bClass}">${area}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
+        function clearSelection() { selectedIndices.clear(); filterData(); updateUI(); }
         function updateUI() {
             document.getElementById('count-display').innerText = selectedIndices.size;
             document.getElementById('btn-print').disabled = selectedIndices.size === 0;
@@ -249,8 +253,8 @@
         function prepareAndPrint() {
             const container = document.getElementById('print-grid-container');
             container.innerHTML = "";
-            selectedIndices.forEach(idx => {
-                const item = allData[idx];
+            selectedIndices.forEach(index => {
+                const item = allData[index];
                 const card = document.createElement('div');
                 card.className = "print-card";
                 card.innerHTML = `
@@ -265,7 +269,9 @@
             });
             window.print();
         }
+
         init();
     </script>
 </body>
+
 </html>
