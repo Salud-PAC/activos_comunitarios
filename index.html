@@ -331,7 +331,7 @@
     function updateFilters() {
       const searchTxt = document.getElementById('searchInput').value.toLowerCase();
       const filtered = allData.filter(item => {
-        const textToSearch = (item.actividad + " " + item.direccion).toLowerCase();
+        const textToSearch = ((item.actividad || "") + " " + (item.direccion || "") + " " + (item.dia || "") + " " + (item.horario || "")).toLowerCase();
         return textToSearch.includes(searchTxt) &&
                (activeFilters.territorio.length === 0 || activeFilters.territorio.includes(item.territorio)) &&
                (activeFilters.categoria.length === 0 || activeFilters.categoria.some(filtro => (item.CATEGORIA || item.categoria || "").includes(filtro))) &&
@@ -419,3 +419,4 @@
   </script>
 </body>
 </html>
+
