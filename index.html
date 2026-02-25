@@ -18,80 +18,147 @@
       --selected: #d1ecf1;
     }
 
-    body { 
-      font-family: 'Inter', sans-serif; 
-      background: var(--bg-body); 
-      margin: 0; 
-      padding: 20px; 
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-body);
+      margin: 0;
+      padding: 20px;
       color: var(--text-main);
     }
-    
-    /* Encabezado */
-    .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 0 40px; }
-    
-    /* Contenedor de Filtros */
+   
+    .header-app { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; margin-left: 50px; }
+   
     .filter-container { width: 93.8%; margin: 0 auto; background: var(--surface); padding: 15px; border-radius: 8px; box-shadow: 0 2px 40px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    .filter-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; width: 100%; }
-    
-    /* Buscador Largo */
-    #searchInput { flex: 3; min-width: 300px; padding: 10px; border: 1px solid var(--border); border-radius: 4px; outline: none; }
-    select { flex: 0.6; padding: 10px; border: 1px solid var(--border); border-radius: 4px; background: white; cursor: pointer; }
-    
-    .btn-print { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-    .btn-print:hover { background: var(--primary-dark); }
+   
+    .filter-group { display: flex; gap: 15px; flex-wrap: wrap; align-items: center; }
+   
+    #searchInput {
+      flex: 0;
+      min-width: 800px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+    }
+
+    select {
+      flex: 0;
+      min-width: 140px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: white;
+    }
+   
+    .btn-print { background: var(--primary); color: white; border: none; padding: 12px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; margin-right: 45px; }
 
     #active-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 15px; min-height: 25px; }
     .tag { background: var(--accent); color: white; padding: 5px 12px; border-radius: 20px; font-size: 13px; display: flex; align-items: center; gap: 8px; }
 
-    /* Tabla */
-    .table-wrapper { width: 95%; margin: 0 auto; background: var(--surface); border-radius: 8px; box-shadow: 0 2px 20px rgba(0,0,0,0.1); overflow: hidden; }
+    .table-wrapper { 
+      width: 95%; 
+      margin: 0 auto; 
+      background: var(--surface); 
+      border-radius: 8px; 
+      box-shadow: 0 2px 20px rgba(0,0,0,0.1); 
+      overflow-y: auto; 
+      max-height: 65vh; 
+    }
+    
     table { width: 100%; border-collapse: collapse; }
-    th { background: var(--primary); color: white; padding: 15px; text-align: left; font-size: 13px; text-transform: uppercase; }
     
-    /* Centrar columna de impacto */
-    th:nth-child(6), td:nth-child(6) { text-align: center !important; }
-
+    th { 
+      background: var(--primary); 
+      color: white; 
+      padding: 15px; 
+      text-align: left; 
+      font-size: 14px; 
+      text-transform: uppercase; 
+      position: sticky; 
+      top: 0; 
+      z-index: 10; 
+    }
+    
+    th:nth-child(5), td:nth-child(5), th:nth-child(6), td:nth-child(6) { 
+      text-align: center !important; 
+    }
+   
+    th:nth-child(5), td:nth-child(5), th:nth-child(6), td:nth-child(6) { text-align: center !important; }
     tr { transition: background 0.2s; border-bottom: 1px solid var(--border); }
-    tr:hover { background-color: var(--hover); } 
-    tr.selected-row { background-color: var(--selected) !important; } 
+    tr:hover { background-color: var(--hover); }
+    tr.selected-row { background-color: var(--selected) !important; }
     td { padding: 12px; vertical-align: top; font-size: 14px; }
-    
+   
     .negrita { font-weight: bold; display: block; }
     .secundario { font-size: 12px; color: #64748b; display: block; margin-top: 4px; }
-    
-    /* Semáforo */
-    .circulo { width: 16px; height: 16px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.1); vertical-align: middle; margin: 0 auto; }
+   
+    .circulo { width: 16px; height: 16px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.1); vertical-align: middle; }
     .bajo { background-color: #2ecc71; }
     .medio { background-color: #f1c40f; }
     .alto { background-color: #e74c3c; }
 
-    .selection-bar { position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: white; padding: 12px 20px; border-radius: 50px; box-shadow: 0 5px 20px rgba(0,0,0,0.4); font-weight: bold; z-index: 100; font-size: 16px; }
+    .selection-bar { position: fixed; bottom: 20px; right: 20px; background: var(--accent); color: white; padding: 10px 15px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.4); font-weight: bold; z-index: 100; margin-right: 40px; }
 
     /* ==========================================
-       SECCIÓN DE IMPRESIÓN (RECETA)
+       ESTILOS DE IMPRESIÓN (RECETA MÉDICA)
        ========================================== */
     @media print {
-            @page { size: letter; margin: 1cm; }
-            header, .container, .floating-bar { display: none !important; }
-            body { background: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-            #print-area { display: block !important; width: 100%; }
-            .doc-header { margin-bottom: 30px; border-left: 6px solid var(--primary); padding-left: 15px; }
-            .doc-header h2 { margin: 0; font-size: 16pt; color: var(--primary-dark); text-transform: uppercase; }
-            .doc-header p { margin: 3px 0 0 0; font-size: 10pt; color: #333; font-weight: 600; text-transform: uppercase; }
-            .doc-title { text-align: center; font-size: 13pt; font-weight: 800; border: 2px solid #000; padding: 8px; margin-bottom: 35px; background: #f8fafc; }
-            .patient-section { margin-bottom: 45px; } 
-            .patient-row { margin-bottom: 18px; display: flex; gap: 20px; font-size: 11pt; }
-            .field-full { flex: 1; border-bottom: 1.5px solid #000; padding-bottom: 2px; }
-            .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
-            .print-card { border: 1.5px solid var(--primary); border-radius: 10px; padding: 15px; background: #fff; page-break-inside: avoid; margin-top: 25px; }
-            .print-card h3 { margin: 0 0 5px 0; font-size: 11.5pt; color: var(--primary-dark); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 5px; }
-            .provider-name { font-size: 9pt; font-style: italic; color: #555; margin-bottom: 8px; display: block; }
-            .data-row { display: flex; font-size: 9.5pt; margin-bottom: 3px; line-height: 1.2; }
-            .data-label { font-weight: 700; width: 75px; color: #222; flex-shrink: 0; }
-            .footer-section { margin-top: 50px; display: flex; justify-content: center; } 
-            .sign-line { border-top: 2px solid #000; width: 280px; text-align: center; padding-top: 8px; font-weight: 700; font-size: 10pt; text-transform: uppercase; }
-        }
+      @page { size: letter; margin: 2cm; margin-bottom: 1cm; margin-left: 1cm; margin-right: 1cm;}
+     
+      body * { visibility: hidden; }
+     
+      #print-area, #print-area * { visibility: visible; }
+      #print-area { display: block !important; position: absolute; left: 0; top: 0; width: 100%; }
+
+      .doc-header { margin-top: 5px; margin-bottom: 40px; border-left: 6px solid var(--primary); padding-left: 15px; }
+      .doc-header h2 { margin: 0; font-size: 16pt; color: var(--primary-dark); text-transform: uppercase; }
+      .doc-header p { margin: 3px 0 0 0; font-size: 10pt; color: #333; font-weight: 500; line-height: 1.4; }
+     
+      .doc-title { text-align: center; font-size: 13pt; font-weight: 800; border: 2px solid #000; padding: 8px; margin-bottom: 35px; background: #f8fafc; }
+     
+      .patient-section { margin-bottom: 45px; }
+      .patient-row { margin-bottom: 18px; display: flex; gap: 20px; font-size: 11pt; }
+      .field-full { flex: 1; border-bottom: 1.5px solid #000; padding-bottom: 2px; min-height: 20px; }
+
+      .print-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+      .print-card { border: 1.5px solid var(--primary); border-radius: 10px; padding: 15px; background: #fff; page-break-inside: avoid; }
+      .print-card h3 { margin: 0 0 8px 0; font-size: 11.5pt; color: var(--primary-dark); border-bottom: 1.5px solid #e2e8f0; padding-bottom: 5px; }
+     
+      .data-row { display: flex; font-size: 9.5pt; margin-bottom: 5px; line-height: 1.2; }
+      .data-label { font-weight: 700; width: 85px; color: #222; flex-shrink: 0; }
+     
+      .footer-section { margin-top: 120px; display: flex; flex-direction: column; align-items: center; }
+      .sign-line { border-top: 2px solid #000; width: 280px; text-align: center; padding-top: 8px; font-weight: 700; font-size: 10pt; text-transform: uppercase; margin-top: 10px; }
+     
+      .circulo { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
     }
+    
+    .btn-clear { 
+      background: #e2e8f0; 
+      color: #475569; 
+      border: none; 
+      padding: 10px 15px; 
+      border-radius: 4px; 
+      cursor: pointer; 
+      font-weight: 600; 
+      font-size: 13px; 
+      transition: 0.2s;
+    }
+    .btn-clear:hover { background: #cbd5e1; }
+
+    .btn-clear-selection { 
+      background: transparent; 
+      color: white; 
+      border: 1px solid white; 
+      padding: 5px 10px; 
+      border-radius: 15px; 
+      cursor: pointer; 
+      font-size: 12px; 
+      margin-left: 15px;
+      font-weight: bold;
+    }
+    .btn-clear-selection:hover { background: rgba(255,255,255,0.2); }
+    
+    
   </style>
 </head>
 <body>
@@ -99,20 +166,20 @@
 <div class="header-app">
   <div class="header-titles">
     <h2 style="margin:0px;">Catálogo de Prescripción Social</h2>
-    <p style="margin: 5px 0 0 0; color: #64748b; font-size: 14px;">
-      Seleccione hasta 4 actividades para la receta del paciente.
+    <p style="margin: 10px 0 0 0; color: #64748b; font-size: 14px;">
+      Seleccione hasta 4 actividades para generar la receta del paciente.
     </p>
   </div>
-  <button class="btn-print" onclick="window.print()">Imprimir Receta</button>
+  <button class="btn-print" onclick="prepararReceta()">Imprimir Receta</button>
 </div>
 
   <div class="filter-container">
     <div class="filter-group">
-      <input type="text" id="searchInput" placeholder="Escribe para buscar taller o dirección...">
+      <input type="text" id="searchInput" placeholder="Escribe para buscar...">
       <select id="territorioSelect"><option value="">Territorio</option><option value="EEF">EEF</option><option value="AN">AN</option><option value="PPD">PPD</option><option value="LVN">LVN</option></select>
       <select id="categoriaSelect"><option value="">Categoría</option></select>
       <select id="impactoSelect"><option value="">Impacto</option><option value="Bajo">Bajo</option><option value="Medio">Medio</option><option value="Alto">Alto</option></select>
-    </div>
+      <button id="btnLimpiar" class="btn-clear" onclick="limpiarFiltros()" style="display: none;">Limpiar filtros</button>    </div>
     <div id="active-filters"></div>
   </div>
 
@@ -127,11 +194,30 @@
     </table>
   </div>
 
-  <div class="selection-bar">Seleccionados: <span id="count">0</span> / 4</div>
+  <div class="selection-bar">Seleccionados: <span id="count">0</span> / 4
+<button id="btnDesmarcar" class="btn-clear-selection" onclick="deseleccionarTodo()" style="display: none;">Desmarcar todos</button>
+  </div>
+
+  <div id="print-area" style="display: none;">
+    <div class="doc-header">
+      <h2>Activos Multidisciplinarios</h2>
+      <p>La participación constante en estas actividades es clave para mejorar tu bienestar físico y emocional. <br> ¡Cada pequeño paso cuenta para una vida más saludable!</p>
+    </div>
+    <div class="doc-title">PRESCRIPCIÓN DE ACTIVIDAD COMUNITARIA</div>
+    <div class="patient-section">
+      <div class="patient-row">Nombre: <div class="field-full"></div></div>
+      <div class="patient-row">RUT: <div class="field-full" style="max-width:200px"></div> Fecha: <div class="field-full"></div></div>
+    </div>
+    <div class="print-grid" id="print-grid-content"></div>
+    <div class="footer-section">
+      <div class="sign-line">Firma y Timbre Profesional <br> </div>
+    </div>
+  </div>
+
 
   <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyCayz1gH5MxIxxpdblwWpBqry9Qm3g054G62zQGQcZUmPSW0A1e0b5NoTINMwHzTQyOg/exec";
-    
+    const API_URL = "https://script.google.com/macros/s/AKfycbwD7JSTGY4_2gz4UOknZpFkuQv2lSDA8neXnjeHQePya9Z9egGlMAgO5EjO4BKvojEifw/exec";
+   
     let allData = [];
     let activeFilters = { territorio: [], categoria: [], impacto: [] };
 
@@ -139,9 +225,15 @@
       try {
         const response = await fetch(API_URL);
         allData = await response.json();
-        
-        const cats = [...new Set(allData.map(item => item.categoria))].filter(Boolean).sort();
-        const catSelect = document.getElementById('categoriaSelect');
+        let todasLasCategorias = [];
+        allData.forEach(item => {
+          let cat = item.CATEGORIA || item.categoria || "";
+          if (cat) {
+            // Corta el texto por las comas, limpia espacios y lo guarda
+            cat.split(',').forEach(c => todasLasCategorias.push(c.trim()));
+          }
+        });
+        const cats = [...new Set(todasLasCategorias)].filter(Boolean).sort();        const catSelect = document.getElementById('categoriaSelect');
         cats.forEach(c => {
           let opt = document.createElement('option');
           opt.value = c; opt.innerText = c;
@@ -149,7 +241,7 @@
         });
         renderTable(allData);
       } catch (e) {
-        document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Error al cargar datos.</td></tr>';
+        document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Error al cargar.</td></tr>';
       }
     }
 
@@ -158,20 +250,36 @@
       tbody.innerHTML = '';
       data.forEach((item, index) => {
         const impactoClase = item.impacto ? item.impacto.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim() : "";
+        
+    let datoContacto = "No disponible";
+        for (let nombreColumna in item) {
+          // Revisa todas las columnas y busca si alguna incluye "contacto" (ignorando mayúsculas)
+          if (nombreColumna.toLowerCase().includes("contacto")) {
+            if (item[nombreColumna] && item[nombreColumna] !== "") {
+              datoContacto = item[nombreColumna];
+              break; // Si lo encuentra, atrapa el dato y deja de buscar
+            }
+          }
+        }
+    
         const tr = document.createElement('tr');
         tr.id = `row-${index}`;
+        tr.dataset.contacto = datoContacto; 
+
         tr.innerHTML = `
-          <td style="text-align:center;"><input type="checkbox" onchange="toggleRowSelection(this, '${index}')"></td>
+          <td style="text-align:center; cursor: pointer;" onclick="document.getElementById('chk-${index}').click();">
+    <input type="checkbox" id="chk-${index}" style="transform: scale(1.2); pointer-events: none;" onchange="toggleRowSelection(this, '${index}')"></td>
           <td><span class="negrita">${item.actividad || ''}</span></td>
           <td><span class="negrita">${item.dia || ''}</span><span class="secundario">${item.horario || ''}</span></td>
-          <td><span>${item.direccion || ''}</span><span class="secundario">Costo: ${item.costo || 'No indicado'}</span></td>
+          <td><span>${item.direccion || ''}</span><span class="secundario">${item.costo || 'Costo: No indicado'}</span></td>
           <td>${item.territorio || ''}</td>
-          <td>${item.impacto ? `<div class="circulo ${impactoClase}"></div>` : ''}</td>
-          <td>${item.categoria || ''}</td>
+          <td style="text-align:center;">${item.impacto ? `<div class="circulo ${impactoClase}"></div>` : ''}</td>
+          <td>${item.CATEGORIA || item.categoria || ''}</td> 
         `;
+        
         tbody.appendChild(tr);
-      });
-    }
+      }); 
+    } 
 
     function toggleRowSelection(checkbox, idx) {
       const row = document.getElementById(`row-${idx}`);
@@ -182,20 +290,68 @@
     function updateCount() {
       const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
       document.getElementById('count').innerText = checked;
+      
+      // NUEVA LÓGICA: Controla si el botón se muestra o se oculta
+      const botonDesmarcar = document.getElementById('btnDesmarcar');
+      if (checked > 0) {
+        botonDesmarcar.style.display = 'inline-block'; // Muestra el botón
+      } else {
+        botonDesmarcar.style.display = 'none'; // Oculta el botón
+      }
+    }
+
+    function prepararReceta() {
+      const selectedRows = document.querySelectorAll('tr.selected-row');
+      const printGrid = document.getElementById('print-grid-content');
+      printGrid.innerHTML = '';
+
+      if (selectedRows.length === 0) {
+        alert("Por favor, selecciona al menos una actividad.");
+        return;
+      }
+
+      selectedRows.forEach(row => {
+        const celdas = row.querySelectorAll('td');
+        const card = document.createElement('div');
+        card.className = 'print-card';
+        card.innerHTML = `
+          <h3>${celdas[1].querySelector('.negrita').innerText}</h3>
+          <div class="data-row"><span class="data-label">Día:</span> <span>${celdas[2].querySelector('.negrita').innerText}</span></div>
+          <div class="data-row"><span class="data-label">Horario:</span> <span>${celdas[2].querySelector('.secundario').innerText}</span></div>
+          <div class="data-row"><span class="data-label">Dirección:</span> <span>${celdas[3].querySelector('span').innerText}</span></div>
+          <div class="data-row"><span class="data-label">Costo:</span> <span>${celdas[3].querySelector('.secundario').innerText}</span></div>
+          <div class="data-row"><span class="data-label">Contacto:</span> <span>${row.dataset.contacto}</span></div>
+        `;
+        printGrid.appendChild(card);
+      });
+
+      window.print();
     }
 
     function updateFilters() {
       const searchTxt = document.getElementById('searchInput').value.toLowerCase();
       const filtered = allData.filter(item => {
-        const textToSearch = (item.actividad + " " + item.direccion + " " + (item.dia || "")).toLowerCase();
-        const matchesSearch = textToSearch.includes(searchTxt);
-        const matchesTerritorio = activeFilters.territorio.length === 0 || activeFilters.territorio.includes(item.territorio);
-        const matchesCategoria = activeFilters.categoria.length === 0 || activeFilters.categoria.includes(item.categoria);
-        const matchesImpacto = activeFilters.impacto.length === 0 || activeFilters.impacto.includes(item.impacto);
-        return matchesSearch && matchesTerritorio && matchesCategoria && matchesImpacto;
+        const textToSearch = (item.actividad + " " + item.direccion).toLowerCase();
+        return textToSearch.includes(searchTxt) &&
+               (activeFilters.territorio.length === 0 || activeFilters.territorio.includes(item.territorio)) &&
+               (activeFilters.categoria.length === 0 || activeFilters.categoria.some(filtro => (item.CATEGORIA || item.categoria || "").includes(filtro))) &&
+               (activeFilters.impacto.length === 0 || activeFilters.impacto.includes(item.impacto));
       });
       renderTable(filtered);
       updateTags();
+
+      // NUEVA LÓGICA: Evalúa si hay algo escrito o algún filtro activo
+      const btnLimpiar = document.getElementById('btnLimpiar');
+      const hayFiltros = searchTxt !== '' || 
+                         activeFilters.territorio.length > 0 || 
+                         activeFilters.categoria.length > 0 || 
+                         activeFilters.impacto.length > 0;
+
+      if (hayFiltros) {
+        btnLimpiar.style.display = 'inline-block'; // Muestra el botón
+      } else {
+        btnLimpiar.style.display = 'none'; // Oculta el botón
+      }
     }
 
     function updateTags() {
@@ -217,7 +373,6 @@
     }
 
     document.getElementById('searchInput').addEventListener('keyup', updateFilters);
-    
     ['territorioSelect', 'categoriaSelect', 'impactoSelect'].forEach(id => {
       document.getElementById(id).addEventListener('change', (e) => {
         const type = id.replace('Select', '');
@@ -229,8 +384,38 @@
       });
     });
 
+    function limpiarFiltros() {
+      // 1. Limpiar el buscador de texto
+      document.getElementById('searchInput').value = '';
+      
+      // 2. Limpiar los selectores visualmente
+      document.getElementById('territorioSelect').value = '';
+      document.getElementById('categoriaSelect').value = '';
+      document.getElementById('impactoSelect').value = '';
+      
+      // 3. Vaciar la memoria de los filtros
+      activeFilters = { territorio: [], categoria: [], impacto: [] };
+      
+      // 4. Volver a cargar la tabla y las etiquetas
+      updateFilters();
+    }
+
+    function deseleccionarTodo() {
+      // 1. Buscar todos los checkbox que estén marcados
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+      
+      // 2. Por cada uno, desmarcarlo y quitarle el color de fondo a la fila
+      checkboxes.forEach(cb => {
+        cb.checked = false;
+        cb.closest('tr').classList.remove('selected-row'); 
+      });
+      
+      // 3. Actualizar el contador (volverá a 0)
+      updateCount();
+    }
+
+
     loadData();
   </script>
 </body>
 </html>
-
