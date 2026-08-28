@@ -120,7 +120,22 @@
   <div class="filter-group">
     <input type="text" id="searchInput" placeholder="Buscar actividad, dirección...">
     <select id="territorioSelect"><option value="">Territorio</option><option value="EEF">EEF</option><option value="AN">AN</option><option value="PPD">PPD</option><option value="LVN">LVN</option></select>
-    <select id="categoriaSelect"><option value="">Categoría</option></select>
+    <select id="categoriaSelect">
+        <option value="">Categoría</option>
+        <option value="Actividad física">Actividad física</option>
+        <option value="Cultura">Cultura</option>
+        <option value="Salud">Salud</option>
+        <option value="Medio ambiente">Medio ambiente</option>
+        <option value="Cosmovisión">Cosmovisión</option>
+        <option value="Apoyos y cuidados">Apoyos y cuidados</option>
+        <option value="Autoayuda">Autoayuda</option>
+        <option value="Educación">Educación</option>
+        <option value="Comercio">Comercio</option>
+        <option value="Social">Social</option>
+        <option value="Religión">Religión</option>
+        <option value="Terapias complementarias">Terapias complementarias</option>
+        <option value="Otros">Otros</option>
+    </select>
     <select id="impactoSelect"><option value="">Impacto</option><option value="Bajo">Bajo</option><option value="Medio">Medio</option><option value="Alto">Alto</option></select>
     <button id="btnLimpiar" class="btn-clear" onclick="limpiarFiltros()" style="display: none; padding: 10px; border-radius: 5px; border:none; cursor:pointer;">Limpiar</button>
   </div>
@@ -217,24 +232,7 @@
     try {
       const response = await fetch(API_URL);
       allData = await response.json();
-      
-      let todasLasCategorias = [];
-      allData.forEach(item => {
-        let cat = item.CATEGORIA || item.categoria || "";
-        if (cat) cat.split(',').forEach(c => todasLasCategorias.push(c.trim()));
-      });
-      const cats = [...new Set(todasLasCategorias)].filter(Boolean).sort();
-      const catSelect = document.getElementById('categoriaSelect');
-      if (catSelect) {
-        catSelect.innerHTML = '<option value="">Categoría</option>';
-        cats.forEach(c => {
-          let opt = document.createElement('option');
-          opt.value = c; opt.innerText = c;
-          catSelect.appendChild(opt);
-        });
-      }
-
-      renderTable(allData);
+      renderTable(allData); // Solo descargamos los datos y dibujamos la tabla
     } catch (e) {
       console.error("Error cargando:", e);
       document.getElementById('tableBody').innerHTML = '<tr><td colspan="7" style="color:red; text-align:center;">Error al conectar con los datos.</td></tr>';
@@ -458,18 +456,31 @@
       return matchText && matchTerr && matchCat && matchImp;
     });
     renderTable(filtered);
-    document.getElementById('btnLimpiar').style.display = (txt || activeFilters.territorio.length > 0) ? 'inline-block' : 'none';
-  }
+    document.getElementById('btnLimpiar').style.display = (txt !== "" || activeFilters.territorio.length > 0 || activeFilters.categoria.length > 0 || activeFilters.impacto.length > 0) ? 'inline-block' : 'none';
+}
 
   document.getElementById('searchInput').addEventListener('keyup', updateFilters);
+  
   document.getElementById('territorioSelect').addEventListener('change', (e) => {
     activeFilters.territorio = e.target.value ? [e.target.value] : [];
     updateFilters();
   });
+
+  document.getElementById('categoriaSelect').addEventListener('change', (e) => {
+    activeFilters.categoria = e.target.value ? [e.target.value] : [];
+    updateFilters();
+  });
+
+  document.getElementById('impactoSelect').addEventListener('change', (e) => {
+    activeFilters.impacto = e.target.value ? [e.target.value] : [];
+    updateFilters();
+  })
   
   function limpiarFiltros() {
     document.getElementById('searchInput').value = '';
     document.getElementById('territorioSelect').value = '';
+    document.getElementById('categoriaSelect').value = ''; // Regresa a "Categoría"
+    document.getElementById('impactoSelect').value = '';   // Regresa a "Impacto"
     activeFilters = { territorio: [], categoria: [], impacto: [] };
     updateFilters();
   }
