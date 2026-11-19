@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Prescripción Social | Pedro Aguirre Cerda</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --primary: #004282;
+      --accent: #D63B32;
+      --bg: #F4F7FA;
+      --text: #0F172A;
+      --muted: #64748B;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      margin: 0;
+      padding: 16px;
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .wrapper { width: 100%; max-width: 480px; }
+
+    #receta-captura {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+      border: 1px solid #E2E8F0;
+    }
+    .receta-header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      border-bottom: 4px solid var(--accent);
+    }
+    .receta-header h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      font-size: 19px;
+      font-weight: 800;
+    }
+    .receta-header p {
+      margin: 6px 0 0 0;
+      font-size: 13px;
+      color: #cbd5e1;
+    }
+    .receta-body { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+
+    .actividad-card {
+      border: 1px solid #E2E8F0;
+      border-left: 4px solid var(--primary);
+      border-radius: 12px;
+      padding: 14px;
+      background: #F8FAFC;
+    }
+    .actividad-card h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0 0 8px 0;
+      font-size: 16px;
+      color: var(--primary);
+    }
+    .dato { font-size: 13.5px; margin-bottom: 4px; line-height: 1.4; }
+    .dato b { color: #334155; }
+    .obs {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dashed #cbd5e1;
+      font-size: 12.5px;
+      font-style: italic;
+      color: var(--muted);
+    }
+    .receta-footer {
+      text-align: center;
+      padding: 12px 18px 18px;
+      font-size: 11.5px;
+      color: var(--muted);
+    }
+
+    .btn-save {
+      width: 100%;
+      margin-top: 16px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      box-shadow: 0 6px 16px rgba(0, 66, 130, 0.25);
+    }
+    .btn-save:disabled { opacity: 0.6; }
+
+    .status-msg { text-align: center; padding: 40px 20px; color: var(--muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+
+<div class="wrapper">
+  <div id="receta-captura">
+    <div class="receta-header">
+      <h1>Prescripción de Actividad Comunitaria</h1>
+      <p>Mejora tu bienestar físico y emocional participando en tu comunidad.</p>
+    </div>
+    <div id="lista-actividades" class="receta-body">
+      <div class="status-msg">Cargando tus actividades...</div>
+    </div>
+    <div class="receta-footer">
+      Red de Salud Pedro Aguirre Cerda · Prescripción Social
+    </div>
+  </div>
+
+  <button id="btnGuardar" class="btn-save" onclick="guardarComoImagen()" style="display:none;">
+    Guardar receta como imagen
+  </button>
+</div>
+
+<script>
+  const API_URL = "https://script.google.com/macros/s/AKfycby5mJiu99eS4htzMimIzEoW8kKUd_PuOYE5DWd4078MzZL_Wur4KCrkCNg0aMz8Ywdb/exec";
+
+  function limpiarHorario(texto) {
+    if (!texto) return "";
+    let t = texto.toString().trim();
+    if (t.includes('1899-12-30') || t.includes('T')) {
+      try {
+        let f = new Date(t);
+        return f.getHours().toString().padStart(2, '0') + ":" + f.getMinutes().toString().padStart(2, '0');
+      } catch (e) { return t; }
+    }
+    return t;
+  }
+
+  async function cargarReceta() {
+    const params = new URLSearchParams(window.location.search);
+    const idsParam = params.get('a');
+    const contenedor = document.getElementById('lista-actividades');
+
+    if (!idsParam) {
+      contenedor.innerHTML = '<div class="status-msg">No se encontraron actividades en este enlace.</div>';
+      return;
+    }
+
+    const idsBuscados = idsParam.split(',').map(x => x.trim());
+
+    try {
+      const res = await fetch(API_URL);
+      const data = await res.json();
+      const seleccionadas = data.filter((item, i) => {
+        const itemId = (item.id || (i + 1)).toString().trim();
+        return idsBuscados.includes(itemId);
+      });
+
+      if (seleccionadas.length === 0) {
+        contenedor.innerHTML = '<div class="status-msg">Las actividades de esta receta ya no están disponibles.</div>';
+        return;
+      }
+
+      contenedor.innerHTML = '';
+      seleccionadas.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'actividad-card';
+        card.innerHTML = `
+          <h2>${item.actividad}</h2>
+          <div class="dato"><b>Día:</b> ${item.dia || 'Por confirmar'}</div>
+          <div class="dato"><b>Hora:</b> ${limpiarHorario(item.horario) || 'Por confirmar'}</div>
+          <div class="dato"><b>Dirección:</b> ${item.direccion || 'Por confirmar'}</div>
+          <div class="dato"><b>Contacto:</b> ${item.contacto || 'No disponible'}</div>
+          ${item.observaciones && item.observaciones !== "Sin observaciones"
+            ? `<div class="obs"><b>Observaciones:</b> ${item.observaciones}</div>` : ''}
+        `;
+        contenedor.appendChild(card);
+      });
+
+      document.getElementById('btnGuardar').style.display = 'block';
+    } catch (e) {
+      contenedor.innerHTML = '<div class="status-msg" style="color:#D63B32;">Error al cargar la receta. Intenta nuevamente.</div>';
+    }
+  }
+
+  async function guardarComoImagen() {
+    const btn = document.getElementById('btnGuardar');
+    btn.innerText = "Generando imagen...";
+    btn.disabled = true;
+
+    try {
+      const elemento = document.getElementById('receta-captura');
+      const canvas = await html2canvas(elemento, { scale: 2, backgroundColor: '#ffffff' });
+      const enlace = document.createElement('a');
+      enlace.download = 'mi-prescripcion-social.png';
+      enlace.href = canvas.toDataURL('image/png');
+      enlace.click();
+    } catch (e) {
+      alert("No se pudo generar la imagen. Puedes tomar una captura de pantalla.");
+    } finally {
+      btn.innerText = "Guardar receta como imagen";
+      btn.disabled = false;
+    }
+  }
+
+  cargarReceta();
+</script>
+</body>
+</html>
